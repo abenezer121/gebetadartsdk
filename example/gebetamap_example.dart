@@ -67,8 +67,7 @@ void callOneToMany() async {
 
 void callGeoCode() async {
   String name = "kotebe 02";
-  String apiKey =
-      "eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiJkMTQyNmJjZTg3MzU4ZmEzYTc1NjRjMjY1YTA5MzZjYyIsImlhdCI6MTY2MjAxODUyMCwic3ViIjoidGFraXMiLCJpc3MiOiJ0YWtpIn0.xfH2ME-LYJ1enQpKMrPI4B-vnFZPGaEsg4rUEp95VqY";
+  String apiKey = "";
   GebetaMapRequest gmr = new GebetaMapRequest();
   ResponseData rs = await gmr.geocode(name, apiKey);
   print(rs.data);

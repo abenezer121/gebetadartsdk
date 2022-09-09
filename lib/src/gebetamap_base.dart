@@ -236,13 +236,15 @@ class GebetaMapRequest {
 
   Future<ResponseData> geocode(String name, String apiKey) async {
     try {
-      var url = "https://mapapi.gebeta.app/api/v1/route/geocoding?" +
+      print(name);
+      print(apiKey);
+      var url = "https://mapapi.gebeta.app/api/v1/route/geocoding?name=" +
           name +
-          "=cafe&apiKey=" +
+          "&apiKey=" +
           apiKey;
       final response = await http.get(Uri.parse(url));
       var decodedJson = json.decode(response.body);
-
+      print(decodedJson);
       if (response.statusCode == 200) {
         var path = decodedJson["data"] as List;
         ResponseData rs = ResponseData(

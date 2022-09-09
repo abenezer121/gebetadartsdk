@@ -234,11 +234,41 @@ class GebetaMapRequest {
     }
   }
 
-  Future<http.Response> GeoCoding(String apiKey) async {
+  Future<ResponseData> geocode(String name, String apiKey) async {
     try {
-      final response = await http
-          .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
-      return response;
+      var url = "https://mapapi.gebeta.app/api/v1/route/geocoding?" +
+          name +
+          "=cafe&apiKey=" +
+          apiKey;
+      final response = await http.get(Uri.parse(url));
+      var decodedJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        var path = decodedJson["data"] as List;
+        ResponseData rs = ResponseData(
+            messages: decodedJson["msg"],
+            statuss: response.statusCode.toString(),
+            responseData: decodedJson["data"]);
+        return rs;
+      } else if (response.statusCode == 403) {
+        ResponseData rs = ResponseData(
+            messages: decodedJson["msg"],
+            statuss: response.statusCode.toString());
+        return rs;
+      } else if (response.statusCode == 400) {
+        ResponseData rs = ResponseData(
+            messages: decodedJson["msg"],
+            statuss: response.statusCode.toString());
+        return rs;
+      } else if (response.statusCode == 500) {
+        ResponseData rs = ResponseData(
+            messages: decodedJson["msg"],
+            statuss: response.statusCode.toString());
+        return rs;
+      } else {
+        ResponseData rs = ResponseData(messages: "UnKnown Error");
+        return rs;
+      }
     } catch (err) {
       throw err;
     }

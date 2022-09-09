@@ -65,6 +65,14 @@ void callOneToMany() async {
   }
 }
 
+void callGeoCode() async {
+  String apiKey = "";
+  String name = "";
+  GebetaMapRequest gmr = new GebetaMapRequest();
+  ResponseData rs = await gmr.geocode(name, apiKey);
+  print(rs.data);
+}
+
 void main(List<String> arguments) async {
   // making directin request
   callDirection();

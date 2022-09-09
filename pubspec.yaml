@@ -1,7 +1,7 @@
 name: gebetamap
 description: sdk for gebetamap
 
-version: 1.0.0
+version: 1.1.2
 homepage : https://github.com/abenezer121/gebetadartsdk
 
 environment:

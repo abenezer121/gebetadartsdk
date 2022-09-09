@@ -1,5 +1,4 @@
 import 'package:gebetamap/gebetamap.dart';
-import 'package:gebetamap/src/utils/Resonse.dart';
 
 void callDirection() async {
   GebetaMapRequest gmr = new GebetaMapRequest();
@@ -11,9 +10,10 @@ void callDirection() async {
   directionStop["lon"] = 38.79883468151093;
   String apiKey = "";
   ResponseData rds = await gmr.direction(directionStart, directionStop, apiKey);
-  print(rds.message);
-  print(rds.path);
-  print(rds.status);
+  print('Response message: ${rds.message}');
+  print('Response status: ${rds.status}');
+  print('path: ${rds.path}');
+  print('distance: ${rds.totalDistance}');
 }
 
 void callMatrix() async {
@@ -39,9 +39,10 @@ void callTss() async {
   points.add({'lat': 9.01166345564756, 'lon': 38.789008246478424});
   GebetaMapRequest gmr = new GebetaMapRequest();
   ResponseData rds = await gmr.tss(points, apiKey);
-  print(rds.message);
-  print(rds.path);
-  print(rds.status);
+  print('Response message: ${rds.message}');
+  print('Response status: ${rds.status}');
+  print('path: ${rds.path}');
+  print('distance: ${rds.totalDistance}');
 }
 
 void callOneToMany() async {
@@ -64,4 +65,7 @@ void callOneToMany() async {
   }
 }
 
-void main() {}
+void main(List<String> arguments) async {
+  // making directin request
+  callDirection();
+}

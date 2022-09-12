@@ -236,8 +236,6 @@ class GebetaMapRequest {
 
   Future<ResponseData> geocode(String name, String apiKey) async {
     try {
-      print(name);
-      print(apiKey);
       var url = "https://mapapi.gebeta.app/api/v1/route/geocoding?name=" +
           name +
           "&apiKey=" +

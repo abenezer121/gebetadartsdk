@@ -41,3 +41,36 @@ var points = <Map>[];
   print('distance: ${rds.totalDistance}');
 ```
 
+making one to many request 
+```dart
+  var directionStart = new Map();
+  directionStart["lat"] = 9.022528936095531;
+  directionStart["lon"] = 38.80400061607361;
+  var points = <Map>[];
+  String apiKey = "";
+  points.add({'lat': 9.005980058445639, 'lon': 38.785734616513466});
+  points.add({'lat': 9.01166345564756, 'lon': 38.789008246478424});
+  GebetaMapRequest gmr = new GebetaMapRequest();
+  List<ResponseData> rs = await gmr.OneToMany(directionStart, points, apiKey);
+
+  for (int i = 0; i < rs.length; i++) {
+    print(rs[i].message);
+    print(rs[i].status);
+    print(rs[i].totalDistance);
+    print(rs[i].path);
+    print("(------------------------------------------)");
+  }
+```
+
+
+
+making Geocoding request
+``` dart
+    String name = "kotebe 02";
+    String apiKey = "";
+    GebetaMapRequest gmr = new GebetaMapRequest();
+    ResponseData rs = await gmr.geocode(name, apiKey);
+    print(rs.data);
+```
+
+

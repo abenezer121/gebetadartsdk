@@ -29,7 +29,8 @@ class GebetaMapRequest {
             messages: decodedJson["msg"],
             statuss: response.statusCode.toString(),
             path: path,
-            totalDist: decodedJson["totalDistance"]);
+            totalDist: decodedJson["totalDistance"],
+            time: decodedJson["timetaken"].toString());
         return rs;
       } else if (response.statusCode == 403) {
         ResponseData rs = ResponseData(
@@ -55,18 +56,22 @@ class GebetaMapRequest {
     }
   }
 
-  Future<List<ResponseData>> matrix(var points, String apiKey) async {
+  Future<List<List<ResponseData>>> matrix(var points, String apiKey) async {
     try {
       String _points = '';
       for (int i = 0; i < points.length; i++) {
         if (i == points.length - 1) {
-          _points +=
-              points[i]['lat'].toString() + "/" + points[i]['lon'].toString();
+          _points += "[" +
+              points[i][0].toString() +
+              "," +
+              points[i][1].toString() +
+              "]]";
         } else {
-          _points += points[i]['lat'].toString() +
-              "/" +
-              points[i]['lon'].toString() +
-              ",";
+          _points += "[" +
+              points[i][0].toString() +
+              "," +
+              points[i][1].toString() +
+              "],";
         }
       }
 
@@ -75,38 +80,50 @@ class GebetaMapRequest {
       final response = await http.get(Uri.parse(url));
 
       var decodedJson = json.decode(response.body);
-      List<ResponseData> responseList = [];
+      List<List<ResponseData>> responseList = [];
       if (response.statusCode == 200) {
         var decodedResposne = decodedJson["response"] as List;
 
         for (int i = 0; i < decodedResposne.length; i++) {
-          // var path = response[i]["direction"] as List;
-          ResponseData rs = ResponseData(
-              messages: decodedResposne[i]["data"]["msg"],
-              statuss: response.statusCode.toString(),
-              totalDist: decodedResposne[i]["data"]["totalDistance"],
-              path: decodedResposne[i]["data"]["direction"]);
+          for (int j = 0; j < decodedResposne[i].length; j++) {
+            List<ResponseData> rsl = [];
+            ResponseData rs = ResponseData(
+                messages: decodedResposne[i][j]["data"]["msg"],
+                statuss: response.statusCode.toString(),
+                totalDist: decodedResposne[i][j]["data"]["totalDistance"],
+                path: decodedResposne[i][j]["data"]["direction"],
+                time: decodedResposne[i][j]["data"]["timetaken"].toString());
 
-          responseList.add(rs);
+            rsl.add(rs);
+            responseList.add(rsl);
+          }
         }
       } else if (response.statusCode == 403) {
         ResponseData rs = ResponseData(
             messages: "Invalid Api Key",
             statuss: response.statusCode.toString());
-        responseList.add(rs);
+        List<ResponseData> rsl = [];
+        rsl.add(rs);
+        responseList.add(rsl);
       } else if (response.statusCode == 400) {
         ResponseData rs = ResponseData(
             messages: "Route Not Found",
             statuss: response.statusCode.toString());
-        responseList.add(rs);
+        List<ResponseData> rsl = [];
+        rsl.add(rs);
+        responseList.add(rsl);
       } else if (response.statusCode == 500) {
         ResponseData rs = ResponseData(
             messages: "Internal Server Error",
             statuss: response.statusCode.toString());
-        responseList.add(rs);
+        List<ResponseData> rsl = [];
+        rsl.add(rs);
+        responseList.add(rsl);
       } else {
         ResponseData rs = new ResponseData(messages: "UnKnown Error");
-        responseList.add(rs);
+        List<ResponseData> rsl = [];
+        rsl.add(rs);
+        responseList.add(rsl);
       }
       return responseList;
     } catch (err) {
@@ -118,20 +135,25 @@ class GebetaMapRequest {
 // ignore: non_constant_identifier_names
   Future<ResponseData> tss(var points, String apiKey) async {
     try {
-      String _points = '';
+      String _points = '[';
       for (int i = 0; i < points.length; i++) {
         if (i == points.length - 1) {
-          _points +=
-              points[i]['lat'].toString() + "/" + points[i]['lon'].toString();
+          _points += "[" +
+              points[i][0].toString() +
+              "," +
+              points[i][1].toString() +
+              "]]";
         } else {
-          _points += points[i]['lat'].toString() +
-              "/" +
-              points[i]['lon'].toString() +
-              ",";
+          _points += "[" +
+              points[i][0].toString() +
+              "," +
+              points[i][1].toString() +
+              "],";
         }
       }
 
       var url = Constants.url + "/tss/?start=" + _points + "&apiKey=" + apiKey;
+
       final response = await http.get(Uri.parse(url));
       var decodedJson = json.decode(response.body);
 
@@ -141,7 +163,8 @@ class GebetaMapRequest {
             messages: decodedJson["msg"],
             statuss: response.statusCode.toString(),
             path: path,
-            totalDist: decodedJson["totalDistance"]);
+            totalDist: decodedJson["totalDistance"],
+            time: decodedJson["timetaken"]);
         return rs;
       } else if (response.statusCode == 403) {
         ResponseData rs = ResponseData(
@@ -169,18 +192,22 @@ class GebetaMapRequest {
 
 // ignore: non_constant_identifier_names
   Future<List<ResponseData>> OneToMany(
-      var directionStart, var points, String apiKey) async {
+      var directionStart, List<List<double>> points, String apiKey) async {
     try {
-      String _points = '';
+      String _points = '[';
       for (int i = 0; i < points.length; i++) {
         if (i == points.length - 1) {
-          _points +=
-              points[i]['lat'].toString() + "/" + points[i]['lon'].toString();
+          _points += "[" +
+              points[i][0].toString() +
+              "," +
+              points[i][1].toString() +
+              "]]";
         } else {
-          _points += points[i]['lat'].toString() +
-              "/" +
-              points[i]['lon'].toString() +
-              ",";
+          _points += "[" +
+              points[i][0].toString() +
+              "," +
+              points[i][1].toString() +
+              "],";
         }
       }
       var url = Constants.url +
@@ -196,16 +223,17 @@ class GebetaMapRequest {
       final response = await http.get(Uri.parse(url));
       // print('Response status: ${response.statusCode}');
       var decodedJson = json.decode(response.body);
+
       List<ResponseData> responseList = [];
       if (response.statusCode == 200) {
         var decodedResposne = decodedJson["directions"] as List;
         for (int i = 0; i < decodedResposne.length; i++) {
-          // var path = response[i]["direction"] as List;
           ResponseData rs = ResponseData(
               messages: decodedResposne[i]["msg"],
               statuss: response.statusCode.toString(),
               totalDist: decodedResposne[i]["totalDistance"],
-              path: decodedResposne[i]["direction"]);
+              path: decodedResposne[i]["direction"],
+              time: decodedResposne[i]["timetaken"]);
 
           responseList.add(rs);
         }

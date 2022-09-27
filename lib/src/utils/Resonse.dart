@@ -4,16 +4,22 @@ class ResponseData {
       this.statuss,
       this.path,
       this.totalDist,
-      this.responseData});
+      this.responseData,
+      this.time});
 
   String messages = "";
   var statuss;
   var path;
   var totalDist;
   var responseData;
+  var time;
 
   List get data {
     return responseData;
+  }
+
+  String get totaltime {
+    return time;
   }
 
   String get message {

@@ -9,59 +9,70 @@ void callDirection() async {
   directionStop["lat"] = 9.021755421022991;
   directionStop["lon"] = 38.79883468151093;
   String apiKey = "";
+
   ResponseData rds = await gmr.direction(directionStart, directionStop, apiKey);
   print('Response message: ${rds.message}');
   print('Response status: ${rds.status}');
   print('path: ${rds.path}');
   print('distance: ${rds.totalDistance}');
+  print('time: ${rds.totaltime}');
 }
 
 void callMatrix() async {
-  var points = <Map>[];
   String apiKey = "";
-  points.add({'lat': 9.005980058445639, 'lon': 38.785734616513466});
-  points.add({'lat': 9.01166345564756, 'lon': 38.789008246478424});
+  List<List<double>> points = [
+    [9.005980058445639, 38.785734616513466],
+    [9.01166345564756, 38.789008246478424]
+  ];
+
   GebetaMapRequest gmr = new GebetaMapRequest();
-  List<ResponseData> rs = await gmr.matrix(points, apiKey);
+  List<List<ResponseData>> rs = await gmr.matrix(points, apiKey);
   for (int i = 0; i < rs.length; i++) {
-    print(rs[i].message);
-    print(rs[i].status);
-    print(rs[i].totalDistance);
-    print(rs[i].path);
-    print("(------------------------------------------)");
+    for (int j = 0; j < rs[i].length; j++) {
+      print('Response message: ${rs[i][j].message}');
+      print('Response status: ${rs[i][j].status}');
+      print('path: ${rs[i][j].path}');
+      print('distance: ${rs[i][j].totalDistance}');
+      print('time: ${rs[i][j].totaltime}');
+    }
   }
 }
 
 void callTss() async {
-  var points = <Map>[];
   String apiKey = "";
-  points.add({'lat': 9.005980058445639, 'lon': 38.785734616513466});
-  points.add({'lat': 9.01166345564756, 'lon': 38.789008246478424});
+  List<List<double>> points = [
+    [9.005980058445639, 38.785734616513466],
+    [9.01166345564756, 38.789008246478424]
+  ];
+
   GebetaMapRequest gmr = new GebetaMapRequest();
   ResponseData rds = await gmr.tss(points, apiKey);
   print('Response message: ${rds.message}');
   print('Response status: ${rds.status}');
   print('path: ${rds.path}');
   print('distance: ${rds.totalDistance}');
+  print('time: ${rds.totaltime}');
 }
 
 void callOneToMany() async {
   var directionStart = new Map();
   directionStart["lat"] = 9.022528936095531;
   directionStart["lon"] = 38.80400061607361;
-  var points = <Map>[];
+  List<List<double>> points = [
+    [9.005980058445639, 38.785734616513466],
+    [9.01166345564756, 38.789008246478424]
+  ];
   String apiKey = "";
-  points.add({'lat': 9.005980058445639, 'lon': 38.785734616513466});
-  points.add({'lat': 9.01166345564756, 'lon': 38.789008246478424});
+
   GebetaMapRequest gmr = new GebetaMapRequest();
   List<ResponseData> rs = await gmr.OneToMany(directionStart, points, apiKey);
 
   for (int i = 0; i < rs.length; i++) {
-    print(rs[i].message);
-    print(rs[i].status);
-    print(rs[i].totalDistance);
-    print(rs[i].path);
-    print("(------------------------------------------)");
+    print('Response message: ${rs[i].message}');
+    print('Response status: ${rs[i].status}');
+    print('path: ${rs[i].path}');
+    print('distance: ${rs[i].totalDistance}');
+    print('time: ${rs[i].totaltime}');
   }
 }
 
@@ -75,5 +86,9 @@ void callGeoCode() async {
 
 void main(List<String> arguments) async {
   // making geocoding request
-  callGeoCode();
+  //callOneToMany();
+  //callGeoCode();
+  //callDirection();
+  //callMatrix();
+  //callTss();
 }
